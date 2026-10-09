@@ -27,12 +27,14 @@ layout = layout.replace("__CATALOG__", f"`{cfg['catalog']}`").replace("__SCHEMA_
 NAME = "Running shoe shelf"
 parent = f"/Users/{cfg['user']}"
 
-existing = next((d for d in w.lakeview.list() if d.display_name == NAME and (d.path or "").startswith(parent)), None)
 board = Dashboard(display_name=NAME, serialized_dashboard=layout, warehouse_id=cfg["warehouse_id"], parent_path=parent)
-if existing:
-    d = w.lakeview.update(dashboard_id=existing.dashboard_id, dashboard=board)
-else:
+try:
     d = w.lakeview.create(dashboard=board)
+except Exception as e:  # already published once: update it in place
+    if "already exists" not in str(e):
+        raise
+    existing_id = w.workspace.get_status(f"{parent}/{NAME}.lvdash.json").resource_id
+    d = w.lakeview.update(dashboard_id=existing_id, dashboard=Dashboard(display_name=NAME, serialized_dashboard=layout, warehouse_id=cfg["warehouse_id"]))
 w.lakeview.publish(dashboard_id=d.dashboard_id, embed_credentials=True, warehouse_id=cfg["warehouse_id"])
 print("Published dashboard", d.dashboard_id)
 displayHTML(f'<a href="/dashboardsv3/{d.dashboard_id}/published">Open the dashboard</a>')
