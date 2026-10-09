@@ -1,0 +1,105 @@
+{
+ "display_name": "Competitor quarterly earnings",
+ "use_case": "dataset_building",
+ "effort": "high",
+ "skill": "You are an equity research analyst building a quarterly financials table for listed companies. Use each issuer's own investor-relations earnings press release, quarterly report or SEC filing as the primary source for every number. Report revenue in the currency the company reports in, as a plain number in millions. Report gross margin as a percentage. Use the company's own fiscal quarter label (for example Nike Q1 FY26, Adidas Q2 2026) and the calendar end date of that quarter. Cite the exact page for every row. If a company has not reported a quarter yet, leave it out.",
+ "goals": [
+  "One row per company per fiscal quarter requested, taken from the issuer's own earnings release, quarterly report or SEC filing",
+  "Revenue as a plain number in millions in the reporting currency, with the currency code in its own field",
+  "Gross margin as a percentage of revenue for that quarter",
+  "The issuer's own fiscal quarter label and the quarter end date in YYYY-MM-DD",
+  "A direct source URL for every row"
+ ],
+ "sources": {
+  "prioritize": "the issuer's investor-relations site, earnings press releases, quarterly reports, SEC EDGAR 10-Q and 10-K filings, and official stock exchange filings",
+  "block": [
+   {
+    "title": "Aggregators and estimates",
+    "domains": [
+     "macrotrends.net",
+     "stockanalysis.com",
+     "statista.com",
+     "seekingalpha.com",
+     "finance.yahoo.com",
+     "marketwatch.com",
+     "wsj.com"
+    ]
+   }
+  ]
+ },
+ "output_schema": {
+  "type": "array",
+  "items": {
+   "type": "object",
+   "required": [
+    "company",
+    "fiscal_quarter_label",
+    "quarter_end_date",
+    "revenue_millions",
+    "currency",
+    "source_url"
+   ],
+   "properties": {
+    "company": {
+     "type": "string",
+     "description": "Company name as reported, e.g. adidas AG"
+    },
+    "ticker": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "description": "Primary listing ticker, e.g. NKE, ADS, PUM, ONON"
+    },
+    "fiscal_quarter_label": {
+     "type": "string",
+     "description": "The issuer's own label, e.g. Q2 2026 or Q4 FY25"
+    },
+    "quarter_end_date": {
+     "type": "string",
+     "description": "Calendar end date of the quarter, YYYY-MM-DD"
+    },
+    "revenue_millions": {
+     "type": "number",
+     "description": "Total revenue or net sales for the quarter, in millions of the reporting currency"
+    },
+    "currency": {
+     "type": "string",
+     "description": "ISO code of the reporting currency: EUR, CHF, USD, JPY"
+    },
+    "revenue_growth_yoy_pct": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "description": "Reported year-over-year revenue growth in percent, as published"
+    },
+    "gross_margin_pct": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "description": "Gross margin as a percentage of revenue for the quarter"
+    },
+    "operating_income_millions": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "description": "Operating income or EBIT for the quarter, in millions of the reporting currency"
+    },
+    "source_url": {
+     "type": "string",
+     "description": "URL of the earnings release, quarterly report or filing the numbers were taken from"
+    },
+    "source_type": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "description": "press_release, quarterly_report, sec_filing or other"
+    }
+   }
+  }
+ }
+}

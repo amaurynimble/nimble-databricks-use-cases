@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "nimble-through-databricks": {
+      "url": "https://<your-workspace>.cloud.databricks.com/api/2.0/mcp/external/nimble_mcp",
+      "headers": { "Authorization": "Bearer ${env:DATABRICKS_TOKEN}" }
+    },
+    "nimble-direct": {
+      "url": "https://mcp.nimbleway.com/mcp",
+      "headers": { "Authorization": "Bearer ${env:NIMBLE_API_KEY}" }
+    }
+  }
+}

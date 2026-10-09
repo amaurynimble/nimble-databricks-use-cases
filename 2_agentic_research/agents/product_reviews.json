@@ -1,0 +1,112 @@
+{
+ "display_name": "Product ratings and reviews",
+ "use_case": "enrichment",
+ "effort": "high",
+ "skill": "You are a consumer-insights analyst for running shoes. For each shoe in the input rows, go to the live product pages on US retailers (Running Warehouse, Dick's Sporting Goods, Zappos, Foot Locker, REI, Amazon) and the brand's own site, read the current star rating and review count, and summarise what reviewers praise and complain about. Match the exact model and version named in the row. Record the price shown on the page you cite. Every value must come from a page you cite.",
+ "goals": [
+  "Match the exact shoe model and version in the input row, not an older or newer version",
+  "Star rating and review count as shown on a live retailer or brand product page, with that page cited",
+  "Current list price in USD from the cited page",
+  "Three short phrases for the most common praise and three for the most common complaints, drawn from recent reviews",
+  "Keep the input fields unchanged"
+ ],
+ "sources": {
+  "prioritize": "retailer product pages with reviews (runningwarehouse.com, dickssportinggoods.com, zappos.com, footlocker.com, rei.com, amazon.com) and the brand's own product page",
+  "block": [
+   {
+    "title": "Low-signal",
+    "domains": [
+     "pinterest.com",
+     "quora.com"
+    ]
+   }
+  ]
+ },
+ "output_schema": {
+  "type": "array",
+  "items": {
+   "type": "object",
+   "required": [
+    "brand",
+    "model"
+   ],
+   "properties": {
+    "brand": {
+     "type": "string"
+    },
+    "model": {
+     "type": "string",
+     "description": "Shoe model and version, e.g. Pegasus 41"
+    },
+    "category": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "description": "daily trainer, tempo, race, trail"
+    },
+    "rating": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "description": "Star rating out of 5 on the cited page"
+    },
+    "review_count": {
+     "type": [
+      "integer",
+      "null"
+     ],
+     "description": "Number of reviews on the cited page"
+    },
+    "price_usd": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "description": "Current price in USD on the cited page"
+    },
+    "retailer": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "description": "Retailer or brand site the rating was read from"
+    },
+    "product_url": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "top_praise": {
+     "type": [
+      "array",
+      "null"
+     ],
+     "items": {
+      "type": "string"
+     },
+     "description": "Up to three short phrases reviewers praise"
+    },
+    "top_complaints": {
+     "type": [
+      "array",
+      "null"
+     ],
+     "items": {
+      "type": "string"
+     },
+     "description": "Up to three short phrases reviewers complain about"
+    },
+    "observed_at": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "description": "Date the page was read, YYYY-MM-DD"
+    }
+   }
+  }
+ }
+}

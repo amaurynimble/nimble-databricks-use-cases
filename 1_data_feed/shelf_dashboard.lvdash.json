@@ -1,0 +1,950 @@
+{
+ "datasets": [
+  {
+   "name": "latest",
+   "displayName": "latest",
+   "queryLines": [
+    "SELECT * FROM __CATALOG__.__SCHEMA__.shelf_products WHERE brand IS NOT NULL AND captured_at = (SELECT max(captured_at) FROM __CATALOG__.__SCHEMA__.shelf_products)"
+   ]
+  },
+  {
+   "name": "history",
+   "displayName": "history",
+   "queryLines": [
+    "SELECT date(captured_at) AS day, brand, retailer, price FROM __CATALOG__.__SCHEMA__.shelf_products WHERE brand IN ('Nike','adidas','HOKA','On','New Balance','Asics','Brooks')"
+   ]
+  }
+ ],
+ "pages": [
+  {
+   "name": "page",
+   "displayName": "Overview",
+   "layout": [
+    {
+     "widget": {
+      "name": "text_0",
+      "textbox_spec": "# Running shoe shelf on five US retailers\nAmazon, Walmart, Target, Foot Locker and ASOS search results, refreshed daily. **Powered by Nimble**"
+     },
+     "position": {
+      "x": 0,
+      "y": 0,
+      "width": 6,
+      "height": 2
+     }
+    },
+    {
+     "widget": {
+      "name": "filter_1",
+      "queries": [
+       {
+        "name": "filter_retailer_1_q",
+        "query": {
+         "datasetName": "latest",
+         "fields": [
+          {
+           "name": "retailer",
+           "expression": "`retailer`"
+          },
+          {
+           "name": "retailer_associativity",
+           "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "filter-multi-select",
+       "encodings": {
+        "fields": [
+         {
+          "fieldName": "retailer",
+          "displayName": "retailer",
+          "queryName": "filter_retailer_1_q"
+         }
+        ]
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Retailer"
+       },
+       "disallowAll": false
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 2,
+      "width": 2,
+      "height": 1
+     }
+    },
+    {
+     "widget": {
+      "name": "filter_2",
+      "queries": [
+       {
+        "name": "filter_search_keyword_2_q",
+        "query": {
+         "datasetName": "latest",
+         "fields": [
+          {
+           "name": "search_keyword",
+           "expression": "`search_keyword`"
+          },
+          {
+           "name": "search_keyword_associativity",
+           "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "filter-multi-select",
+       "encodings": {
+        "fields": [
+         {
+          "fieldName": "search_keyword",
+          "displayName": "search_keyword",
+          "queryName": "filter_search_keyword_2_q"
+         }
+        ]
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Search"
+       },
+       "disallowAll": false
+      }
+     },
+     "position": {
+      "x": 2,
+      "y": 2,
+      "width": 2,
+      "height": 1
+     }
+    },
+    {
+     "widget": {
+      "name": "filter_3",
+      "queries": [
+       {
+        "name": "filter_brand_3_q",
+        "query": {
+         "datasetName": "latest",
+         "fields": [
+          {
+           "name": "brand",
+           "expression": "`brand`"
+          },
+          {
+           "name": "brand_associativity",
+           "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "filter-multi-select",
+       "encodings": {
+        "fields": [
+         {
+          "fieldName": "brand",
+          "displayName": "brand",
+          "queryName": "filter_brand_3_q"
+         }
+        ]
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Brand"
+       },
+       "disallowAll": false
+      }
+     },
+     "position": {
+      "x": 4,
+      "y": 2,
+      "width": 2,
+      "height": 1
+     }
+    },
+    {
+     "widget": {
+      "name": "counter_4",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "latest",
+         "fields": [
+          {
+           "name": "products_on_the_shelf",
+           "expression": "COUNT(`product_name`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "counter",
+       "encodings": {
+        "value": {
+         "fieldName": "products_on_the_shelf",
+         "displayName": "Products on the shelf"
+        }
+       },
+       "frame": {
+        "showDescription": true,
+        "description": "Products on the shelf"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 3,
+      "width": 2,
+      "height": 3
+     }
+    },
+    {
+     "widget": {
+      "name": "counter_5",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "latest",
+         "fields": [
+          {
+           "name": "average_price",
+           "expression": "AVG(`price`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "counter",
+       "encodings": {
+        "value": {
+         "fieldName": "average_price",
+         "displayName": "Average price",
+         "format": {
+          "type": "number-currency",
+          "currencyCode": "USD",
+          "decimalPlaces": {
+           "type": "exact",
+           "places": 2
+          }
+         }
+        }
+       },
+       "frame": {
+        "showDescription": true,
+        "description": "Average price"
+       }
+      }
+     },
+     "position": {
+      "x": 2,
+      "y": 3,
+      "width": 2,
+      "height": 3
+     }
+    },
+    {
+     "widget": {
+      "name": "counter_6",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "latest",
+         "fields": [
+          {
+           "name": "share_on_sale____",
+           "expression": "AVG(CASE WHEN `list_price` IS NOT NULL THEN 100 ELSE 0 END)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 2,
+       "widgetType": "counter",
+       "encodings": {
+        "value": {
+         "fieldName": "share_on_sale____",
+         "displayName": "Share on sale (%)",
+         "format": {
+          "type": "number-plain",
+          "decimalPlaces": {
+           "type": "exact",
+           "places": 1
+          }
+         }
+        }
+       },
+       "frame": {
+        "showDescription": true,
+        "description": "Share on sale (%)"
+       }
+      }
+     },
+     "position": {
+      "x": 4,
+      "y": 3,
+      "width": 2,
+      "height": 3
+     }
+    },
+    {
+     "widget": {
+      "name": "bar_7",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "latest",
+         "fields": [
+          {
+           "name": "brand",
+           "expression": "`brand`"
+          },
+          {
+           "name": "avg__price__",
+           "expression": "AVG(`price`)"
+          },
+          {
+           "name": "retailer",
+           "expression": "`retailer`"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "bar",
+       "encodings": {
+        "x": {
+         "fieldName": "brand",
+         "scale": {
+          "type": "categorical"
+         },
+         "displayName": "brand"
+        },
+        "y": {
+         "fieldName": "avg__price__",
+         "scale": {
+          "type": "quantitative"
+         },
+         "displayName": "avg__price__"
+        },
+        "color": {
+         "fieldName": "retailer",
+         "scale": {
+          "type": "categorical"
+         },
+         "displayName": "retailer"
+        },
+        "label": {
+         "show": true
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Average price by brand and retailer"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 6,
+      "width": 6,
+      "height": 7
+     }
+    },
+    {
+     "widget": {
+      "name": "bar_8",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "latest",
+         "fields": [
+          {
+           "name": "brand",
+           "expression": "`brand`"
+          },
+          {
+           "name": "sum_case_when__sponsored__then_1_else_0_",
+           "expression": "SUM(CASE WHEN `sponsored` THEN 1 ELSE 0 END)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "bar",
+       "encodings": {
+        "x": {
+         "fieldName": "sum_case_when__sponsored__then_1_else_0_",
+         "scale": {
+          "type": "quantitative"
+         },
+         "displayName": "sum_case_when__sponsored__then_1_else_0_"
+        },
+        "y": {
+         "fieldName": "brand",
+         "scale": {
+          "type": "categorical"
+         },
+         "displayName": "brand"
+        },
+        "label": {
+         "show": true
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Sponsored slots by brand"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 13,
+      "width": 3,
+      "height": 7
+     }
+    },
+    {
+     "widget": {
+      "name": "bar_9",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "latest",
+         "fields": [
+          {
+           "name": "brand",
+           "expression": "`brand`"
+          },
+          {
+           "name": "avg__discount_pct__",
+           "expression": "AVG(`discount_pct`)"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "bar",
+       "encodings": {
+        "x": {
+         "fieldName": "avg__discount_pct__",
+         "scale": {
+          "type": "quantitative"
+         },
+         "displayName": "avg__discount_pct__"
+        },
+        "y": {
+         "fieldName": "brand",
+         "scale": {
+          "type": "categorical"
+         },
+         "displayName": "brand"
+        },
+        "label": {
+         "show": true
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Average discount on items on sale (%)"
+       }
+      }
+     },
+     "position": {
+      "x": 3,
+      "y": 13,
+      "width": 3,
+      "height": 7
+     }
+    },
+    {
+     "widget": {
+      "name": "line_10",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "history",
+         "fields": [
+          {
+           "name": "day",
+           "expression": "`day`"
+          },
+          {
+           "name": "avg__price__",
+           "expression": "AVG(`price`)"
+          },
+          {
+           "name": "brand",
+           "expression": "`brand`"
+          }
+         ],
+         "disaggregated": false
+        }
+       }
+      ],
+      "spec": {
+       "version": 3,
+       "widgetType": "line",
+       "encodings": {
+        "x": {
+         "fieldName": "day",
+         "scale": {
+          "type": "categorical"
+         },
+         "displayName": "day"
+        },
+        "y": {
+         "fieldName": "avg__price__",
+         "scale": {
+          "type": "quantitative"
+         },
+         "displayName": "avg__price__"
+        },
+        "color": {
+         "fieldName": "brand",
+         "scale": {
+          "type": "categorical"
+         },
+         "displayName": "brand"
+        }
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Average price by day"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 20,
+      "width": 6,
+      "height": 6
+     }
+    },
+    {
+     "widget": {
+      "name": "table_11",
+      "queries": [
+       {
+        "name": "main_query",
+        "query": {
+         "datasetName": "latest",
+         "fields": [
+          {
+           "name": "product_url",
+           "expression": "`product_url`"
+          },
+          {
+           "name": "retailer",
+           "expression": "`retailer`"
+          },
+          {
+           "name": "search_keyword",
+           "expression": "`search_keyword`"
+          },
+          {
+           "name": "position",
+           "expression": "`position`"
+          },
+          {
+           "name": "brand",
+           "expression": "`brand`"
+          },
+          {
+           "name": "product_name",
+           "expression": "`product_name`"
+          },
+          {
+           "name": "price",
+           "expression": "`price`"
+          },
+          {
+           "name": "list_price",
+           "expression": "`list_price`"
+          },
+          {
+           "name": "rating",
+           "expression": "`rating`"
+          },
+          {
+           "name": "review_count",
+           "expression": "`review_count`"
+          },
+          {
+           "name": "sponsored",
+           "expression": "`sponsored`"
+          }
+         ],
+         "disaggregated": true
+        }
+       }
+      ],
+      "spec": {
+       "version": 1,
+       "widgetType": "table",
+       "allowHTMLByDefault": false,
+       "condensed": true,
+       "withRowNumber": false,
+       "itemsPerPage": 25,
+       "paginationSize": "default",
+       "invisibleColumns": [],
+       "encodings": {
+        "columns": [
+         {
+          "fieldName": "product_url",
+          "displayName": "product_url",
+          "title": "Open",
+          "type": "string",
+          "displayAs": "link",
+          "visible": true,
+          "order": 0,
+          "allowSearch": false,
+          "alignContent": "left",
+          "linkUrlTemplate": "{{ @ }}",
+          "linkTextTemplate": "Open \u2197",
+          "linkTitleTemplate": "{{ @ }}",
+          "linkOpenInNewTab": true,
+          "highlightLinks": true,
+          "allowHTML": false,
+          "useMonospaceFont": false,
+          "preserveWhitespace": false,
+          "imageUrlTemplate": "{{ @ }}",
+          "imageTitleTemplate": "{{ @ }}",
+          "imageWidth": "",
+          "imageHeight": "",
+          "booleanValues": [
+           "false",
+           "true"
+          ]
+         },
+         {
+          "fieldName": "retailer",
+          "displayName": "retailer",
+          "title": "Retailer",
+          "type": "string",
+          "displayAs": "string",
+          "visible": true,
+          "order": 1,
+          "allowSearch": true,
+          "alignContent": "left",
+          "linkUrlTemplate": "{{ @ }}",
+          "linkTextTemplate": "{{ @ }}",
+          "linkTitleTemplate": "{{ @ }}",
+          "linkOpenInNewTab": true,
+          "highlightLinks": false,
+          "allowHTML": false,
+          "useMonospaceFont": false,
+          "preserveWhitespace": false,
+          "imageUrlTemplate": "{{ @ }}",
+          "imageTitleTemplate": "{{ @ }}",
+          "imageWidth": "",
+          "imageHeight": "",
+          "booleanValues": [
+           "false",
+           "true"
+          ]
+         },
+         {
+          "fieldName": "search_keyword",
+          "displayName": "search_keyword",
+          "title": "Search",
+          "type": "string",
+          "displayAs": "string",
+          "visible": true,
+          "order": 2,
+          "allowSearch": true,
+          "alignContent": "left",
+          "linkUrlTemplate": "{{ @ }}",
+          "linkTextTemplate": "{{ @ }}",
+          "linkTitleTemplate": "{{ @ }}",
+          "linkOpenInNewTab": true,
+          "highlightLinks": false,
+          "allowHTML": false,
+          "useMonospaceFont": false,
+          "preserveWhitespace": false,
+          "imageUrlTemplate": "{{ @ }}",
+          "imageTitleTemplate": "{{ @ }}",
+          "imageWidth": "",
+          "imageHeight": "",
+          "booleanValues": [
+           "false",
+           "true"
+          ]
+         },
+         {
+          "fieldName": "position",
+          "displayName": "position",
+          "title": "Rank",
+          "type": "integer",
+          "displayAs": "number",
+          "visible": true,
+          "order": 3,
+          "allowSearch": false,
+          "alignContent": "right",
+          "linkUrlTemplate": "{{ @ }}",
+          "linkTextTemplate": "{{ @ }}",
+          "linkTitleTemplate": "{{ @ }}",
+          "linkOpenInNewTab": true,
+          "highlightLinks": false,
+          "allowHTML": false,
+          "useMonospaceFont": false,
+          "preserveWhitespace": false,
+          "imageUrlTemplate": "{{ @ }}",
+          "imageTitleTemplate": "{{ @ }}",
+          "imageWidth": "",
+          "imageHeight": "",
+          "booleanValues": [
+           "false",
+           "true"
+          ],
+          "numberFormat": "0,0"
+         },
+         {
+          "fieldName": "brand",
+          "displayName": "brand",
+          "title": "Brand",
+          "type": "string",
+          "displayAs": "string",
+          "visible": true,
+          "order": 4,
+          "allowSearch": true,
+          "alignContent": "left",
+          "linkUrlTemplate": "{{ @ }}",
+          "linkTextTemplate": "{{ @ }}",
+          "linkTitleTemplate": "{{ @ }}",
+          "linkOpenInNewTab": true,
+          "highlightLinks": false,
+          "allowHTML": false,
+          "useMonospaceFont": false,
+          "preserveWhitespace": false,
+          "imageUrlTemplate": "{{ @ }}",
+          "imageTitleTemplate": "{{ @ }}",
+          "imageWidth": "",
+          "imageHeight": "",
+          "booleanValues": [
+           "false",
+           "true"
+          ]
+         },
+         {
+          "fieldName": "product_name",
+          "displayName": "product_name",
+          "title": "Product",
+          "type": "string",
+          "displayAs": "string",
+          "visible": true,
+          "order": 5,
+          "allowSearch": true,
+          "alignContent": "left",
+          "linkUrlTemplate": "{{ @ }}",
+          "linkTextTemplate": "{{ @ }}",
+          "linkTitleTemplate": "{{ @ }}",
+          "linkOpenInNewTab": true,
+          "highlightLinks": false,
+          "allowHTML": false,
+          "useMonospaceFont": false,
+          "preserveWhitespace": false,
+          "imageUrlTemplate": "{{ @ }}",
+          "imageTitleTemplate": "{{ @ }}",
+          "imageWidth": "",
+          "imageHeight": "",
+          "booleanValues": [
+           "false",
+           "true"
+          ]
+         },
+         {
+          "fieldName": "price",
+          "displayName": "price",
+          "title": "Price",
+          "type": "float",
+          "displayAs": "number",
+          "visible": true,
+          "order": 6,
+          "allowSearch": false,
+          "alignContent": "right",
+          "linkUrlTemplate": "{{ @ }}",
+          "linkTextTemplate": "{{ @ }}",
+          "linkTitleTemplate": "{{ @ }}",
+          "linkOpenInNewTab": true,
+          "highlightLinks": false,
+          "allowHTML": false,
+          "useMonospaceFont": false,
+          "preserveWhitespace": false,
+          "imageUrlTemplate": "{{ @ }}",
+          "imageTitleTemplate": "{{ @ }}",
+          "imageWidth": "",
+          "imageHeight": "",
+          "booleanValues": [
+           "false",
+           "true"
+          ],
+          "numberFormat": "$0,0.00"
+         },
+         {
+          "fieldName": "list_price",
+          "displayName": "list_price",
+          "title": "List price",
+          "type": "float",
+          "displayAs": "number",
+          "visible": true,
+          "order": 7,
+          "allowSearch": false,
+          "alignContent": "right",
+          "linkUrlTemplate": "{{ @ }}",
+          "linkTextTemplate": "{{ @ }}",
+          "linkTitleTemplate": "{{ @ }}",
+          "linkOpenInNewTab": true,
+          "highlightLinks": false,
+          "allowHTML": false,
+          "useMonospaceFont": false,
+          "preserveWhitespace": false,
+          "imageUrlTemplate": "{{ @ }}",
+          "imageTitleTemplate": "{{ @ }}",
+          "imageWidth": "",
+          "imageHeight": "",
+          "booleanValues": [
+           "false",
+           "true"
+          ],
+          "numberFormat": "$0,0.00"
+         },
+         {
+          "fieldName": "rating",
+          "displayName": "rating",
+          "title": "Rating",
+          "type": "float",
+          "displayAs": "number",
+          "visible": true,
+          "order": 8,
+          "allowSearch": false,
+          "alignContent": "right",
+          "linkUrlTemplate": "{{ @ }}",
+          "linkTextTemplate": "{{ @ }}",
+          "linkTitleTemplate": "{{ @ }}",
+          "linkOpenInNewTab": true,
+          "highlightLinks": false,
+          "allowHTML": false,
+          "useMonospaceFont": false,
+          "preserveWhitespace": false,
+          "imageUrlTemplate": "{{ @ }}",
+          "imageTitleTemplate": "{{ @ }}",
+          "imageWidth": "",
+          "imageHeight": "",
+          "booleanValues": [
+           "false",
+           "true"
+          ],
+          "numberFormat": "0.0"
+         },
+         {
+          "fieldName": "review_count",
+          "displayName": "review_count",
+          "title": "Reviews",
+          "type": "integer",
+          "displayAs": "number",
+          "visible": true,
+          "order": 9,
+          "allowSearch": false,
+          "alignContent": "right",
+          "linkUrlTemplate": "{{ @ }}",
+          "linkTextTemplate": "{{ @ }}",
+          "linkTitleTemplate": "{{ @ }}",
+          "linkOpenInNewTab": true,
+          "highlightLinks": false,
+          "allowHTML": false,
+          "useMonospaceFont": false,
+          "preserveWhitespace": false,
+          "imageUrlTemplate": "{{ @ }}",
+          "imageTitleTemplate": "{{ @ }}",
+          "imageWidth": "",
+          "imageHeight": "",
+          "booleanValues": [
+           "false",
+           "true"
+          ],
+          "numberFormat": "0,0"
+         },
+         {
+          "fieldName": "sponsored",
+          "displayName": "sponsored",
+          "title": "Sponsored",
+          "type": "boolean",
+          "displayAs": "boolean",
+          "visible": true,
+          "order": 10,
+          "allowSearch": false,
+          "alignContent": "center",
+          "linkUrlTemplate": "{{ @ }}",
+          "linkTextTemplate": "{{ @ }}",
+          "linkTitleTemplate": "{{ @ }}",
+          "linkOpenInNewTab": true,
+          "highlightLinks": false,
+          "allowHTML": false,
+          "useMonospaceFont": false,
+          "preserveWhitespace": false,
+          "imageUrlTemplate": "{{ @ }}",
+          "imageTitleTemplate": "{{ @ }}",
+          "imageWidth": "",
+          "imageHeight": "",
+          "booleanValues": [
+           "false",
+           "true"
+          ]
+         }
+        ]
+       },
+       "frame": {
+        "showTitle": true,
+        "title": "Products in the latest snapshot"
+       }
+      }
+     },
+     "position": {
+      "x": 0,
+      "y": 26,
+      "width": 6,
+      "height": 10
+     }
+    }
+   ]
+  }
+ ]
+}
