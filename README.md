@@ -16,14 +16,15 @@ Check these four things first:
 
 - Your workspace needs Unity Catalog, serverless notebooks and a serverless SQL warehouse.
 - You need a catalog where you can create a schema.
-- You need a Nimble API key. You can create one at https://online.nimbleway.com/account-settings/api-keys.
+- You need a Nimble API key. Ask your Nimble account team for one. If your team already has a Nimble account, an admin can create a key at https://online.nimbleway.com/account-settings/api-keys.
 - Genie and Agent Bricks need the workspace preview **Enable networking for isolated workloads in Serverless SQL Warehouses**. Turn it on under Settings > Previews, then stop and start the warehouse. The notebooks work without it.
 
 Then follow these steps:
 
-1. In your workspace, open **Workspace > Create > Git folder** and paste `https://github.com/amaurynimble/nimble-databricks-use-cases`.
-2. Open `00_install`, attach serverless compute, fill in the catalog, the schema name and your Nimble key, and click **Run all**. It takes about two minutes.
-3. Open any notebook in the three folders and click **Run all**. Run the notebooks in each folder in number order.
+1. Get your Nimble API key from your Nimble account team.
+2. In your workspace, open **Workspace > Create > Git folder** and paste `https://github.com/amaurynimble/nimble-databricks-use-cases`.
+3. Open `00_install`, attach serverless compute, fill in the catalog, the schema name and your Nimble key, and click **Run all**. It takes about two minutes.
+4. Open any notebook in the three folders and click **Run all**. Run the notebooks in each folder in number order.
 
 The install stores your key in a Databricks secret scope. It saves your settings to `.nimble_use_cases.json` in your home folder, so the other notebooks need no input.
 

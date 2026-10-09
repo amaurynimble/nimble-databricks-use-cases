@@ -11,7 +11,7 @@
 # MAGIC 5. It saves your settings, so the other notebooks run without questions.
 # MAGIC
 # MAGIC Fill in the widgets at the top, attach serverless compute, and click **Run all**.
-# MAGIC You can get a Nimble API key at https://online.nimbleway.com/account-settings/api-keys.
+# MAGIC Your Nimble account team gives you the Nimble API key. If your team already has a Nimble account, an admin can create one at https://online.nimbleway.com/account-settings/api-keys.
 
 # COMMAND ----------
 
