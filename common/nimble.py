@@ -36,10 +36,11 @@ class Nimble:
         return r.json()
 
     # Search -------------------------------------------------------------------------------------
-    def search(self, query, max_results=5, focus=None, search_depth="lite", country="US"):
+    def search(self, query, max_results=5, focus=None, search_depth="standard", country="US"):
+        """standard depth returns page text in each result's description; focus modes need lite depth."""
         body = {"query": query, "max_results": max_results, "search_depth": search_depth, "country": country, "locale": "en"}
         if focus:
-            body["focus"] = focus
+            body.update(focus=focus, search_depth="lite")
         return self._post("/v1/search", body, timeout=60).get("results") or []
 
     # Extraction Templates ----------------------------------------------------------------------

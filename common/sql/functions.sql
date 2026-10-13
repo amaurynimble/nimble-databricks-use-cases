@@ -14,9 +14,11 @@ AS $$
 class Handler:
     def eval(self, query, max_results, focus, api_key):
         import requests
-        body = {"query": query, "max_results": max_results or 5, "search_depth": "lite", "country": "US", "locale": "en"}
+        # standard depth returns about 2,000 characters of page text per result in under a second;
+        # focus modes (news, shopping) only work with lite depth
+        body = {"query": query, "max_results": max_results or 5, "search_depth": "standard", "country": "US", "locale": "en"}
         if focus:
-            body["focus"] = focus
+            body.update(focus=focus, search_depth="lite")
         headers = {"Authorization": "Bearer " + (api_key or ""), "Content-Type": "application/json",
                    "X-Client-Source": "nimble-databricks-use-cases"}
         try:
@@ -25,7 +27,7 @@ class Handler:
         except Exception:
             data = {}
         for x in data.get("results") or []:
-            yield (x.get("title"), x.get("description"), x.get("url"), x.get("content"))
+            yield (x.get("title"), (x.get("description") or "")[:300], x.get("url"), x.get("content") or x.get("description"))
 $$
 
 -- @@
